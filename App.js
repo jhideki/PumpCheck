@@ -1,60 +1,21 @@
-import { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import HomeScreen from "./screens/HomeScreen";
+import AddWorkoutScreen from "./screens/AddWorkoutScreen";
+
+const Tab = createBottomTabNavigator();
 export default function App() {
-  const [enteredExText, setEnteredExText] = useState("");
-  const [enteredRepsText, setEnteredRepsText] = useState("");
-  const [lifts, setLifts] = useState([]);
-  const [lift, setLift] = useState({ reps: "", liftName: "" });
-
-  function exInputHandler(userInput) {
-    setEnteredExText(userInput);
-  }
-  function repInputHandler(userInput) {
-    setEnteredRepsText(userInput);
-  }
-  function addLiftHandler() {
-    setLift({ reps: enteredRepsText, liftName: enteredExText });
-    setEnteredExText("");
-    setEnteredRepsText("");
-  }
-  useEffect(() => {
-    if (lift.reps !== "" && lift.liftName !== "") {
-      setLifts((currentLift) => [...currentLift, lift]); // iterate through lifts and add to end
-    }
-  }, [lift]);
-  const renderArray = (array) => {
-    return array.map((item, index) => {
-      return (
-        <View key={index}>
-          <Text>{item.reps}</Text>
-          <Text>{item.liftName}</Text>
-        </View>
-      );
-    });
-  };
   return (
-    <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
-        <View style={styles.TextInput}>
-          <TextInput
-            placeholder="Your lift"
-            onChangeText={exInputHandler}
-            onSubmitEditing={addLiftHandler}
-          />
-        </View>
-        <View style={styles.TextInput}>
-          <TextInput
-            inputMode="numeric"
-            placeholder="Your reps"
-            onChangeText={repInputHandler}
-            onSubmitEditing={addLiftHandler}
-          />
-        </View>
-        <Button title="Add lift" onPress={addLiftHandler} />
-      </View>
-      <View style={styles.liftsContainer}>{renderArray(lifts)}</View>
-    </View>
+    <NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Add Workout" component={AddWorkoutScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -64,22 +25,7 @@ const styles = StyleSheet.create({
     PaddingHorizontal: 16,
     flex: 1,
   },
-  inputContainer: {
-    flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    marginBottom: 50,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
-  },
-  TextInput: {
-    borderWidth: 1,
-    borderColer: "#cccccc",
-    width: "80%",
-    barginRight: 8,
-    padding: 8,
-    marginRight: 8,
-  },
+
   liftsContainer: {
     flex: 3,
     padding: 32,
