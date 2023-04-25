@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StyleSheet, View, FlatList, Button, TextInput } from "react-native";
 
 import ExcersizeItem from "./ExcersizeItem";
 import ExcersizeInput from "./ExcersizeInput";
@@ -7,6 +7,7 @@ import ExcersizeInput from "./ExcersizeInput";
 function WorkoutInput(Props) {
   const [lifts, setLifts] = useState([]);
   const [modalIsVisible, setModalIsVisible] = useState(false);
+  const [enteredNameText, setEnteredNameText] = useState("");
 
   function startAddLiftHandler() {
     setModalIsVisible(true);
@@ -27,11 +28,20 @@ function WorkoutInput(Props) {
     endAddliftHandler();
   }
 
+  function addWorkoutHandler() {
+    Props.onLogWorkout(lifts, enteredNameText);
+  }
+
   function deleteGoalHandler(id) {
     setLifts((currentLifts) => {
       return currentLifts.filter((lift) => lift.id !== id);
     });
   }
+
+  function workOutInputHandler(userInput) {
+    setEnteredNameText(userInput);
+  }
+
   return (
     <View style={styles.workoutContainer}>
       <Button
@@ -65,7 +75,14 @@ function WorkoutInput(Props) {
         />
       </View>
       <View styles={styles.inputContainer}>
-        <Button title="Log Workout" />
+        <View styles={styles.textInput}>
+          <TextInput
+            placeholder="Workout name"
+            onChangeText={workOutInputHandler}
+            value={enteredNameText}
+          />
+        </View>
+        <Button title="Log Workout" onPress={addWorkoutHandler} />
       </View>
     </View>
   );
@@ -90,5 +107,13 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     PaddingHorizontal: 16,
     flex: 1,
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColer: "#cccccc",
+    width: "80%",
+    barginRight: 8,
+    padding: 8,
+    marginRight: 8,
   },
 });

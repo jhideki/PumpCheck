@@ -4,11 +4,8 @@ import { StyleSheet, View, Text } from "react-native";
 const WorkoutItem = ({ workout }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{workout.title}</Text>
-      <Text style={styles.date}>{workout.date}</Text>
-      <Text style={styles.time}>{workout.time}</Text>
-      <Text style={styles.location}>{workout.lifts}</Text>
-      <Text style={styles.description}>{workout.description}</Text>
+      <Text style={styles.excersizeText}>{workout.date}</Text>
+      <Text style={styles.location}>{workout.name}</Text>
     </View>
   );
 };

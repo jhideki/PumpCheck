@@ -18,16 +18,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  appContainer: {
-    paddingTop: 50,
-    PaddingHorizontal: 16,
-    flex: 1,
-  },
-
-  liftsContainer: {
-    flex: 3,
-    padding: 32,
-  },
-});

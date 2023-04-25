@@ -9,6 +9,7 @@ function ExcersizeItem(props) {
       <View style={styles.excersizeItem}>
         <Text style={styles.excersizeText}>{props.reps}</Text>
         <Text style={styles.excersizeText}>{props.liftName}</Text>
+        <Text style={styles.excersizeText}>{props.date}</Text>
       </View>
     </Pressable>
   );
