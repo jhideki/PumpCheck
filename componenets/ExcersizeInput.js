@@ -1,19 +1,37 @@
-import { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Modal } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, TextInput, Button, StyleSheet, Modal, Text } from "react-native";
 import { Muscle } from "../data/exercise.d";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Dropdown } from "react-native-element-dropdown";
+import { GetExercisesByMuscle } from "../utils/SortExersizes";
 
 function ExcersizeInput(props) {
-  const [enteredExText, setEnteredExText] = useState("");
-  const [enteredRepsText, setEnteredRepsText] = useState("");
-  const [muscleGroup, setMuslceGroup] = useState("chest");
-  const [open, setOpen] = useState(false);
-  const [items, setItems] = useState([
-    ...Object.values(Muscle).map((itemValue) => ({
+  const [enteredRepsText, setEnteredRepsText] = useState(""); // user input
+  const [muscleGroup, setMuscleGroup] = useState(""); // user input
+  const [excersise, setExcersise] = useState(""); // user input
+  const [exercisesItems, setExcersisesItems] = useState([]); // dropdown items
+  const [muscleGroupItems, setMuscleGroupItems] = useState(
+    Object.values(Muscle).map((itemValue) => ({
       label: itemValue,
       value: itemValue,
-    })),
-  ]);
+      name: itemValue,
+      id: Math.random().toString(),
+    }))
+  ); // dropdown items
+
+  useEffect(() => {
+    async function fetchData() {
+      const filteredExercises = GetExercisesByMuscle(muscleGroup);
+      const formattedExercises = filteredExercises.map((exercise) => ({
+        label: exercise,
+        value: exercise,
+        name: exercise,
+        id: Math.random().toString(),
+      }));
+
+      setExcersisesItems(formattedExercises);
+    }
+    fetchData();
+  }, [muscleGroup]);
 
   function exInputHandler(userInput) {
     setEnteredExText(userInput);
@@ -24,34 +42,64 @@ function ExcersizeInput(props) {
   }
 
   function addLiftHandler() {
-    props.onAddLift(enteredExText, enteredRepsText);
-    setEnteredExText("");
+    props.onAddLift(muscleGroup, excersise, enteredRepsText);
+    setMuscleGroup("");
     setEnteredRepsText("");
+    setExcersise("");
   }
 
   return (
-    <Modal visible={props.visible} animationType="slide">
+    <Modal
+      visible={props.visible}
+      animationType="slide"
+      style={styles.container}
+    >
       <View style={styles.inputContainer}>
-        <View style={styles.textInput}>
-          <TextInput
-            placeholder="Your lift"
-            onChangeText={exInputHandler}
-            value={enteredExText}
+        <View style={styles.dropDownContainer}>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={muscleGroupItems}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="Select muscle group"
+            searchPlaceholder="Search..."
+            value={muscleGroup}
+            onChange={(muscleGroupItems) => {
+              setMuscleGroup(muscleGroupItems.value);
+            }}
           />
         </View>
-        <DropDownPicker
-          open={open}
-          items={items}
-          setOpen={setOpen}
-          setItems={setItems}
-          style={styles.textInput}
-        />
+        <View style={styles.dropDownContainer}>
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            data={exercisesItems}
+            search
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="Select excersise"
+            searchPlaceholder="Search..."
+            value={excersise}
+            onChange={(exercisesItems) => {
+              setExcersise(exercisesItems.value);
+            }}
+          />
+        </View>
         <View style={styles.textInput}>
           <TextInput
             inputMode="numeric"
-            placeholder="Your reps"
+            placeholder="Number of reps"
             onChangeText={repInputHandler}
             value={enteredRepsText}
+            placeholderTextColor="black"
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -71,15 +119,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
   },
   textInput: {
-    borderWidth: 1,
-    borderColor: "#cccccc",
+    fontSize: 16,
+    margin: 16,
+    height: 50,
+    borderBottomColor: "gray",
+    borderBottomWidth: 0.5,
+  },
+  dropDownContainer: {
     width: "80%",
-    marginRight: 8,
-    padding: 8,
   },
   buttonContainer: {
     flexDirection: "row",
@@ -87,5 +136,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     marginBottom: 36,
+  },
+  dropdown: {
+    margin: 16,
+    height: 50,
+    borderBottomColor: "gray",
+    borderBottomWidth: 0.5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });

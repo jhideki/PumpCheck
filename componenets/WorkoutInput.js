@@ -16,12 +16,13 @@ function WorkoutInput(Props) {
   function endAddliftHandler() {
     setModalIsVisible(false);
   }
-  function addLiftHandler(enteredExText, enteredRepsText) {
+  function addLiftHandler(muscleGroup, excersiseName, enteredRepsText) {
     setLifts((currentLifts) => [
       ...currentLifts,
       {
+        muscle: muscleGroup,
         reps: enteredRepsText,
-        liftName: enteredExText,
+        liftName: excersiseName,
         id: Math.random().toString(),
       },
     ]);
@@ -44,11 +45,13 @@ function WorkoutInput(Props) {
 
   return (
     <View style={styles.workoutContainer}>
-      <Button
-        title="Add New Lift"
-        color="#5e0acc"
-        onPress={startAddLiftHandler}
-      />
+      <View styles={styles.addNewLiftButtonContainer}>
+        <Button
+          title="Add New Lift"
+          color="#5e0acc"
+          onPress={startAddLiftHandler}
+        />
+      </View>
       {modalIsVisible && (
         <ExcersizeInput
           onAddLift={addLiftHandler}
@@ -68,16 +71,17 @@ function WorkoutInput(Props) {
                 id={item.id}
                 reps={item.reps}
                 liftName={item.liftName}
+                muscleGroup={item.muscle}
                 onDeleteItem={deleteGoalHandler}
               />
             );
           }}
         />
       </View>
-      <View styles={styles.inputContainer}>
+      <View styles={styles.exportLiftContainer}>
         <View styles={styles.textInput}>
           <TextInput
-            placeholder="Workout name"
+            placeholder="Name your workout"
             onChangeText={workOutInputHandler}
             value={enteredNameText}
           />
@@ -104,16 +108,25 @@ const styles = StyleSheet.create({
     padding: 32,
   },
   workoutContainer: {
-    paddingTop: 50,
     PaddingHorizontal: 16,
     flex: 1,
   },
   textInput: {
+    PaddingHorizontal: 16,
+    flex: 1,
     borderWidth: 1,
-    borderColer: "#cccccc",
-    width: "80%",
-    barginRight: 8,
+    borderColor: "red",
     padding: 8,
-    marginRight: 8,
+    alignItems: "center",
+  },
+  addNewLiftButtonContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    flex: 1,
+  },
+  exportLiftContainer: {
+    flex: 1,
   },
 });
