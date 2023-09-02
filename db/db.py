@@ -3,8 +3,8 @@ import mysql.connector
 # Database configuration
 db_config = {
     "host": "database-1.cthnanocrrjq.us-east-2.rds.amazonaws.com",
-    "user": "pumpcheckadmin",
-    "password": "Yellow$64",
+    "user": "",
+    "password": "",
     "database": "database-1",
 }
 
