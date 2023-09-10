@@ -1,21 +1,31 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Provider as PaperProvider } from "react-native-paper"; // Import PaperProvider
-import customTheme from "./customTheme"; // Import your custom theme
-import HomeScreen from "./screens/HomeScreen";
-import AddWorkoutScreen from "./screens/AddWorkoutScreen";
+import {
+  NavigationContainer,
+  DarkTheme as NavigationDarkTheme,
+  DefaultTheme as NavigationLightTheme,
+} from "@react-navigation/native";
+import {
+  Provider as PaperProvider,
+  adaptNavigationTheme,
+  MD3DarkTheme,
+  MD3LightTheme,
+} from "react-native-paper";
+import MyTabs from "./componenets/tabs";
+import merge from "deepmerge";
 
-const Tab = createBottomTabNavigator();
+const { LightTheme, DarkTheme } = adaptNavigationTheme({
+  reactNavigationDark: NavigationDarkTheme,
+  reactNavigationLight: NavigationLightTheme,
+});
+
+const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
+const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
 export default function App() {
   return (
-    <PaperProvider theme={customTheme}>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Add Workout" component={AddWorkoutScreen} />
-        </Tab.Navigator>
+    <PaperProvider theme={CombinedDefaultTheme}>
+      <NavigationContainer theme={CombinedDefaultTheme}>
+        <MyTabs></MyTabs>
       </NavigationContainer>
     </PaperProvider>
   );
