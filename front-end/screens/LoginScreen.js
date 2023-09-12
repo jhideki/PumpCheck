@@ -40,9 +40,8 @@ function LoginScreen() {
             }
           />
         </View>
-        <View style={styles.button}>
-          <Button mode="contained"></Button>
-        </View>
+
+        <Button mode="contained"></Button>
       </View>
     </View>
   );
