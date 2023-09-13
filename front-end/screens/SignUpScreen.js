@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { TextInput, Appbar, Button } from "react-native-paper";
+import { TextInput, Appbar, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
-import { useNavigation } from "@react-navigation/native";
 
-function LoginScreen() {
+function SingUpScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -12,13 +11,14 @@ function LoginScreen() {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Appbar.Header>
-        <Appbar.Content title="Sign In" subtitle={"Subtitle"} />
-      </Appbar.Header>
       <View style={styles.content}>
+        <Button icon="google" mode="contained" style={styles.button}>
+          Sign up with Google
+        </Button>
+        <Text>Or</Text>
+        <Divider />
         <View style={styles.input}>
           <TextInput
             label="Email"
@@ -42,19 +42,9 @@ function LoginScreen() {
             }
           />
         </View>
-
-        <Button mode="contained" style={styles.button}>
-          Login
-        </Button>
-        <Button icon="google" mode="contained" style={styles.button2}>
-          Sign in with Google
-        </Button>
-        <Button mode="text" onPress={() => navigation.navigate("Signup")}>
-          Don't have account? Sign up here.
-        </Button>
       </View>
     </View>
   );
 }
 
-export default LoginScreen;
+export default SingUpScreen;

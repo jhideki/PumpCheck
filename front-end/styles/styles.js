@@ -1,6 +1,7 @@
 // styles.js
 
 import { StyleSheet } from "react-native";
+import { CustomTheme } from "./theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -19,11 +20,17 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "80%", // Set the width to 100% to make it full width
-    marginBottom: 12,
+    marginBottom: 20,
   },
   button: {
-    wdith: "100%",
-    marginBottom: 12,
+    marginBottom: 10,
+    width: "60%",
+    backgroundColor: CustomTheme.colors.primary,
+  },
+  button2: {
+    marginBottom: 10,
+    width: "60%",
+    backgroundColor: CustomTheme.colors.secondary,
   },
 });
 

@@ -3,9 +3,10 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import AddWorkoutScreen from "../screens/AddWorkoutScreen";
 import LoginScreen from "../screens/LoginScreen";
+
 const Tab = createMaterialBottomTabNavigator();
 
-function MyTabs() {
+function TabNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -42,4 +43,4 @@ function MyTabs() {
   );
 }
 
-export default MyTabs;
+export default TabNavigator;
