@@ -6,6 +6,7 @@ import CustomTheme from "./styles/theme";
 import { createStackNavigator } from "@react-navigation/stack";
 import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
+import SignUpPersonalInfoScreen from "./screens/SignUpPersonalInfoScreen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,11 @@ export default function App() {
             name="Signup"
             component={SignUpScreen}
             options={{ title: "Create an account" }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="SignupPersonInfo"
+            component={SignUpPersonalInfoScreen}
+            options={{ title: "Tell us about you" }}
           ></Stack.Screen>
           <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
         </Stack.Navigator>

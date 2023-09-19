@@ -46,7 +46,7 @@ function LoginScreen() {
         <Button mode="contained" style={styles.button}>
           Login
         </Button>
-        <Button icon="google" mode="contained" style={styles.button2}>
+        <Button icon="google" mode="contained" style={styles.buttonSecondary}>
           Sign in with Google
         </Button>
         <Button mode="text" onPress={() => navigation.navigate("Signup")}>

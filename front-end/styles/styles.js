@@ -1,12 +1,12 @@
-// styles.js
-
 import { StyleSheet } from "react-native";
 import { CustomTheme } from "./theme";
+
+const commonVerticalSpacing = 10; // Adjust the value for your desired spacing
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    justifyContent: "center",
   },
   header: {
     alignItems: "flex-end",
@@ -14,23 +14,43 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   content: {
-    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  subContent30: {
+    flex: 0.3,
     justifyContent: "center",
     alignItems: "center",
   },
   input: {
-    width: "80%", // Set the width to 100% to make it full width
-    marginBottom: 20,
+    width: "80%",
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to inputs
   },
   button: {
-    marginBottom: 10,
     width: "60%",
     backgroundColor: CustomTheme.colors.primary,
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to buttons
   },
-  button2: {
-    marginBottom: 10,
+  buttonSecondary: {
     width: "60%",
     backgroundColor: CustomTheme.colors.secondary,
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to secondary buttons
+  },
+  textContainer: {
+    width: "80%",
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to text containers
+  },
+  text: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to text
+  },
+  horizontalContent: {
+    flexDirection: "row",
+  },
+  horizontalInput: {
+    width: "40%",
+    marginVertical: commonVerticalSpacing, // Apply vertical spacing to horizontal inputs
   },
 });
 

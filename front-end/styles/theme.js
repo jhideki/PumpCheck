@@ -20,5 +20,4 @@ const CombinedDefaultTheme = merge(MD3LightTheme, LightTheme);
 const CombinedDarkTheme = merge(MD3DarkTheme, DarkTheme);
 
 const CustomTheme = CombinedDefaultTheme;
-console.log(CustomTheme);
 export { CustomTheme };
