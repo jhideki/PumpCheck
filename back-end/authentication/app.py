@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager
 from flask_bcrypt import Bcrypt
 from routes import routes
+from models import User
 
 from dotenv import load_dotenv
 import os
@@ -34,17 +35,7 @@ login_manager.login_view = "login"
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-class User(db.Model, UserMixin):
-    __tablename__ = 'users'
-
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(255), nullable=False, unique=True)
-    password = db.Column(db.String(255), nullable=False)
-
-    def get_id(self):
-        return str(self.user_id)
-   
-Routes = routes(app,db,User)
+Routes = routes(app,db)
 Routes.configure_routes()
 
 if __name__ == '__main__':
