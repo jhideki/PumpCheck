@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask_login import login_user, logout_user
 from flask_bcrypt import Bcrypt
 from models import Workout, Exercise, User
+from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 
 class routes:
     def __init__(self, app, db):
@@ -43,17 +44,22 @@ class routes:
                 if username and password:
                     user = User.query.filter_by(username=username).first()
                     if user and bcrypt.check_password_hash(user.password, password):
-                        login_user(user)
-                        return jsonify({'message': 'Login successful'})
+                        additional_claims = {
+                            'user_id': user.user_id,
+                            
+                        }
+                        access_token = create_access_token(identity=user.user_id, additional_claims=additional_claims)
+                        return jsonify({'access_token': access_token, 'message': 'Login successful'})
                     else:
                         return jsonify({'error': 'Invalid username or password'})
                 else:
                     return jsonify({'error': 'Invalid data'})
 
         @app.route('/api/logout', methods=['GET'])
+        @jwt_required()
         def api_logout():
-            logout_user()
-            return jsonify({'message': 'Logout successful'})
+            current_user_id = get_jwt_identity()
+            return jsonify({'message': 'Logout successful for user with ID: ' + str(current_user_id)})
         
         @app.route('/api/workouts', methods=['GET'])
         def get_workouts():
