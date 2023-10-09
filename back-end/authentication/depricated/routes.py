@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, redirect, url_for
 from flask_login import login_user, logout_user
 from flask_bcrypt import Bcrypt
 from models import Workout, Exercise, User
@@ -97,3 +97,26 @@ class routes:
             db.session.add(exercise)
             db.session.commit()
             return jsonify({'message': 'Exercise created successfully'})
+        
+
+        
+        @app.route('/api/protected', methods=['GET'])
+        def protected_resource():
+            # Check if the 'Authorization' header is present in the request
+            if 'Authorization' not in request.headers:
+                return 'Missing Authorization header', 401  # Unauthorized
+
+            # Get the value of the 'Authorization' header
+            auth_header = request.headers['Authorization']
+
+            # Split the header value to get the token
+            # Assuming that the header value format is "Bearer YOUR_ACCESS_TOKEN"
+            parts = auth_header.split()
+            if len(parts) != 2 or parts[0] != 'Bearer':
+                return 'Invalid Authorization header format', 401  # Unauthorized
+
+            access_token = parts[1]
+
+            # Now you have the access_token, and you can validate it and perform any necessary actions
+
+            return 'Protected resource accessed successfully'

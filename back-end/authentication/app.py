@@ -1,12 +1,11 @@
-from flask import Flask
+from flask import Flask, redirect, url_for, session
+from flask_oauthlib.client import OAuth
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from routes import routes
-from models import User
 from flask_jwt_extended import JWTManager
 from database import db
+from auth_routes import auth_blueprint
+from workouts_routes import workouts_blueprint
 
 from dotenv import load_dotenv
 import os
@@ -32,16 +31,10 @@ app.config['SECRET_KEY'] = SECRET_KEY
 db.init_app(app)
 jwt = JWTManager(app)
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+app.register_blueprint(auth_blueprint, url_prefix='/auth')
+app.register_blueprint(workouts_blueprint, url_prefix='/workouts')
 
-Routes = routes(app,db)
-Routes.configure_routes()
 
 if __name__ == '__main__':
     app.run(debug=True)

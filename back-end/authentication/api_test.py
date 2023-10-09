@@ -3,10 +3,10 @@ import sys
 
 # Update these variables with your API endpoint and test data
 base_url = 'http://127.0.0.1:5000'  # Replace with your actual server address
-register_url = f'{base_url}/api/register'
-log_exercise_url = f'{base_url}/api/exercises'
-login_url = f'{base_url}/api/login'
-logout_url = f'{base_url}/api/logout'
+register_url = f'{base_url}/auth/api/register'
+log_exercise_url = f'{base_url}/auth/api/workouts'
+login_url = f'{base_url}/auth/api/login'
+logout_url = f'{base_url}/auth/api/logout'
 
 
 def test_register(username):
