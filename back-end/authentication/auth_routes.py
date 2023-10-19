@@ -1,10 +1,8 @@
 # auth_routes.py
 from flask import Blueprint, request, jsonify, url_for, session
-from flask_bcrypt import Bcrypt
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from models import User
-from database import db
-from flask_oauthlib.client import OAuth
+from extensions import db, oauth, bcrypt
 from dotenv import load_dotenv
 import os
 
@@ -15,22 +13,19 @@ GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 auth_blueprint = Blueprint('auth', __name__)
-bcrypt = Bcrypt()
 
 # Configure OAuth for Google
-oauth = OAuth()
-google = oauth.remote_app(
-    'google',
-    consumer_key=GOOGLE_CLIENT_ID,
-    consumer_secret=GOOGLE_CLIENT_SECRET,
-    request_token_params={
-        'scope': 'email',  # Define the required scope(s)
-    },
-    base_url='https://www.googleapis.com/oauth2/v1/',
-    request_token_url=None,
-    access_token_method='POST',
+google = oauth.register(
+    name='google',
+    client_id=GOOGLE_CLIENT_ID,
+    client_secret=GOOGLE_CLIENT_SECRET,
     access_token_url='https://accounts.google.com/o/oauth2/token',
+    access_token_params=None,
+    refresh_token_url=None,
     authorize_url='https://accounts.google.com/o/oauth2/auth',
+    authorize_params=None,
+    api_base_url='https://www.googleapis.com/oauth2/v1/',
+    client_kwargs={'scope': 'email'},
 )
 
 @auth_blueprint.route('/api/register', methods=['POST'])
@@ -64,7 +59,6 @@ def api_login():
             if user and bcrypt.check_password_hash(user.password, password):
                 additional_claims = {
                     'user_id': user.user_id,
-                    
                 }
                 access_token = create_access_token(identity=user.user_id, additional_claims=additional_claims)
                 return jsonify({'access_token': access_token, 'message': 'Login successful'})
@@ -79,38 +73,87 @@ def api_logout():
     current_user_id = get_jwt_identity()
     return jsonify({'message': 'Logout successful for user with ID: ' + str(current_user_id)})
 
-@auth_blueprint.route('/api/google_login', methods=['POST'])
+@auth_blueprint.route('/api/google_login', methods=['GET'])
 def api_google_login():
-  return google.authorize(callback=url_for('auth.google_callback', _external=True))
+    redirect_uri = url_for('auth.google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
 
-@auth_blueprint.route('/api/google_login', methods=['POST'])
+@auth_blueprint.route('/api/google_register', methods=['post'])
 def api_google_register():
-  if request.method == 'POST' and request.is_json:
-    data = request.get_json()
-    username = data.get('username')
-    weight = data.get('weight')
-    height = data.get('height')
-    age = data.get('age')
-  
-  google.authorize(callback=url_for('auth.google_callback', _external=True))
-  user_email=session.get['google_user_email']
+    if request.method == 'POST' and request.is_json:
+        data = request.get_json()
+        username = data.get('username')
+        weight = data.get('weight')
+        height = data.get('height')
+        age = data.get('age')
+    
+    # Check the session for the Google email
+    google_email = session.get('google_user_email')
+    if not google_email:
+        return jsonify({'error': 'Google email not found in session'}), 400
 
-  if not User.query.filter_by(email=user_email).first():
-    new_user = User(username=username, email=user_email, weight=weight,height=height,age=age)
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({'message': 'Google user registered successfully'})
+    # Query the database for a user with the given email
+    user = User.query.filter_by(email=google_email).first()
+
+    # If a user exists, update their record with the new data
+    if user:
+        user.username = username
+        user.weight = weight
+        user.height = height
+        user.age = age
+        db.session.commit()
+        return jsonify({'message': 'User updated successfully'}), 200
+
+    # If user doesn't exist (this is an additional step, and might not be necessary for your flow)
+    else:
+        new_user = User(username=username, email=google_email, weight=weight, height=height, age=age)
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'message': 'User registered successfully'}), 201
 
 @auth_blueprint.route('/google-callback')
 def google_callback():
-    resp = google.authorized_response()
-    if resp is None or resp.get('access_token') is None:
+    authorization_code = request.args.get('code')
+
+    if not authorization_code:
+        return 'Authorization code not found', 400
+
+    # Use authlib to exchange the code for a token
+    token = google.authorize_access_token()
+
+    # Save the token for future use (e.g., in a session or database)
+    session['token'] = token
+    resp = google.get('userinfo')
+
+    if not resp:
+        print("No response from userinfo endpoint.")
+        return 'No response received.'
+
+    user_info = resp.json()
+    if 'error' in user_info:
         return 'Access denied: reason={} error={}'.format(
-            request.args['error_reason'],
-            request.args['error_description']
+            user_info.get('error', "Unknown"),
+            user_info.get('error_description', "Unknown")
         )
-    
-    # Fetch user email information from Google
-    user_info = google.get('userinfo')
-    session['google_user_email'] = user_info.data['email']
+
+    session['google_user_email'] = user_info.get('email')
+
+    #Register User
+    if not User.query.filter_by(email=user_info['email']).first():
+        new_user = User(email=user_info['email'],username=user_info['email'])
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'message': 'Google user registered successfully'})
+    else:
+        #Sign in
+        google_email = session.get('google_user_email')
+        user = User.query.filter_by(email=google_email).first()
+        additional_claims = {
+                    'user_id': user.user_id,
+        }
+        access_token = create_access_token(identity=user.user_id, additional_claims=additional_claims)
+        return jsonify({'access_token': access_token, 'message': 'Login successful'})
+        
+
+
     

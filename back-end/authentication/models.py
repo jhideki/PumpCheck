@@ -1,4 +1,4 @@
-from database import db
+from extensions import db
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -9,6 +9,7 @@ class User(db.Model):
     age = db.Column(db.Integer)
     weight = db.Column(db.Float)
     height = db.Column(db.Float)
+    email = db.Column(db.String(255))
 
     def get_id(self):
         return str(self.user_id)
@@ -19,7 +20,8 @@ class User(db.Model):
             'username': self.username,
             'age': self.age,
             'weight': self.weight,
-            'height': self.height
+            'height': self.height,
+            'email': self.email,
         }
 
 class Workout(db.Model):

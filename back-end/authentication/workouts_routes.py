@@ -1,7 +1,7 @@
 # workouts_routes.py
 from flask import Blueprint, request, jsonify
 from models import Workout, Exercise
-from database import db
+from extensions import db
 
 workouts_blueprint = Blueprint('workouts', __name__)
 

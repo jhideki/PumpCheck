@@ -1,9 +1,6 @@
-from flask import Flask, redirect, url_for, session
-from flask_oauthlib.client import OAuth
+from flask import Flask
 from flask_cors import CORS
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
-from database import db
+from extensions import db,jwt,oauth,bcrypt
 from auth_routes import auth_blueprint
 from workouts_routes import workouts_blueprint
 
@@ -19,22 +16,25 @@ DB_HOST = os.getenv("HOST_ENDPOINT")
 DB_NAME = os.getenv("DB_NAME")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-app = Flask(__name__)
+def create_app():
+    
+    app = Flask(__name__)
+    oauth.init_app(app)
+    bcrypt.init_app(app)
+    CORS(app)
 
-bcrypt = Bcrypt(app)
-CORS(app)
+    # Database configuration
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
+    app.config['SECRET_KEY'] = SECRET_KEY
 
-# Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
-app.config['SECRET_KEY'] = SECRET_KEY
+    db.init_app(app)
+    jwt.init_app(app)
 
-db.init_app(app)
-jwt = JWTManager(app)
+    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    app.register_blueprint(workouts_blueprint, url_prefix='/workouts')
+    return app
 
-
-app.register_blueprint(auth_blueprint, url_prefix='/auth')
-app.register_blueprint(workouts_blueprint, url_prefix='/workouts')
-
+app = create_app()
 
 if __name__ == '__main__':
     app.run(debug=True)
