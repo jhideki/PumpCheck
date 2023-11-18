@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { TextInput, Appbar, Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
+import { signIn } from "../api/api";
 
 function LoginScreen() {
   const [email, setEmail] = React.useState("");
@@ -46,7 +47,12 @@ function LoginScreen() {
         <Button mode="contained" style={styles.button}>
           Login
         </Button>
-        <Button icon="google" mode="contained" style={styles.buttonSecondary}>
+        <Button
+          icon="google"
+          mode="contained"
+          style={styles.buttonSecondary}
+          onPress={() => signIn("", "", true)}
+        >
           Sign in with Google
         </Button>
         <Button mode="text" onPress={() => navigation.navigate("Signup")}>

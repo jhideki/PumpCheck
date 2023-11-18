@@ -7,6 +7,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpPersonalInfoScreen from "./screens/SignUpPersonalInfoScreen";
+import GoogleSignInScreen from "./screens/GoogleSignInScreen";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,10 @@ export default function App() {
             name="SignupPersonInfo"
             component={SignUpPersonalInfoScreen}
             options={{ title: "Tell us about you" }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="GoogleAuth"
+            component={GoogleSignInScreen}
           ></Stack.Screen>
           <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
         </Stack.Navigator>

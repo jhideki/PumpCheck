@@ -3,8 +3,9 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
+import { signIn } from "../api/api";
 
-function SingUpScreen() {
+function SignUpScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [passwordVerified, setPasswordVerified] = React.useState("");
@@ -25,10 +26,21 @@ function SingUpScreen() {
     return string1 === string2;
   }
 
+  function handleGoogleAuth(token) {
+    console.log("Received token: ", token);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Button icon="google" mode="contained" style={styles.button}>
+        <Button
+          icon="google"
+          mode="contained"
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("GoogleAuth", { handleGoogleAuth })
+          }
+        >
           Sign up with Google
         </Button>
         <View style={styles.textContainer}>
@@ -103,4 +115,4 @@ function SingUpScreen() {
   );
 }
 
-export default SingUpScreen;
+export default SignUpScreen;
