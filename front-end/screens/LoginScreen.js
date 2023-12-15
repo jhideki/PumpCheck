@@ -3,8 +3,6 @@ import { View } from "react-native";
 import { TextInput, Appbar, Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { signIn, registerUser } from "../api/firebaseAPI";
-import User from "../objects/User";
 function LoginScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");

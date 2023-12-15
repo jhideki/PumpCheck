@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { registerUser } from "../api/firebaseAPI";
+import {registerUser} from "../api/firebaseAPI";
 import User from "../objects/User";
 function SignUpScreen() {
 
@@ -71,7 +71,7 @@ function SignUpScreen() {
           <TextInput
             label="Username"
             value={username}
-            onChangeText={(username) => setEmail(username)}
+            onChangeText={(username) => setUsername(username)}
             mode="outlined"
           />
         </View>
