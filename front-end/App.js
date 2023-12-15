@@ -8,37 +8,39 @@ import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpPersonalInfoScreen from "./screens/SignUpPersonalInfoScreen";
 import GoogleSignInScreen from "./screens/GoogleSignInScreen";
-import firebase from './firebaseConfig';
+import { AuthProvider } from "./utils/AuthContext";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider theme={CustomTheme}>
-      <NavigationContainer theme={CustomTheme}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Tabs"
-            component={TabNavigator}
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="Signup"
-            component={SignUpScreen}
-            options={{ title: "Create an account" }}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="SignupPersonInfo"
-            component={SignUpPersonalInfoScreen}
-            options={{ title: "Tell us about you" }}
-          ></Stack.Screen>
-          <Stack.Screen
-            name="GoogleAuth"
-            component={GoogleSignInScreen}
-          ></Stack.Screen>
-          <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <AuthProvider>
+      <PaperProvider theme={CustomTheme}>
+        <NavigationContainer theme={CustomTheme}>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Tabs"
+              component={TabNavigator}
+              options={{ headerShown: false }}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="Signup"
+              component={SignUpScreen}
+              options={{ title: "Create an account" }}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="SignupPersonInfo"
+              component={SignUpPersonalInfoScreen}
+              options={{ title: "Tell us about you" }}
+            ></Stack.Screen>
+            <Stack.Screen
+              name="GoogleAuth"
+              component={GoogleSignInScreen}
+            ></Stack.Screen>
+            <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </AuthProvider>
   );
 }

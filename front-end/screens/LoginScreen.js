@@ -3,6 +3,9 @@ import { View } from "react-native";
 import { TextInput, Appbar, Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
+import { loginUser } from "../api/firebaseAPI";
+import User from "../objects/User";
+
 function LoginScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -10,6 +13,10 @@ function LoginScreen() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
+  };
+  const handleLogin = () => {
+    user = new User(email, password);
+    loginUser(user);
   };
   const navigation = useNavigation();
   return (
@@ -42,15 +49,14 @@ function LoginScreen() {
           />
         </View>
 
-        <Button mode="contained" style={styles.button}>
+        <Button
+          mode="contained"
+          style={styles.button}
+          onPress={() => handleLogin(email, password)}
+        >
           Login
         </Button>
-        <Button
-          icon="google"
-          mode="contained"
-          style={styles.buttonSecondary}
-          onPress={() => signIn("", "", true)}
-        >
+        <Button icon="google" mode="contained" style={styles.buttonSecondary}>
           Sign in with Google
         </Button>
         <Button mode="text" onPress={() => navigation.navigate("Signup")}>

@@ -3,10 +3,9 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import {registerUser} from "../api/firebaseAPI";
+import { registerUser } from "../api/firebaseAPI";
 import User from "../objects/User";
 function SignUpScreen() {
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [username, setUsername] = React.useState("");
@@ -22,8 +21,8 @@ function SignUpScreen() {
     setIsPasswordVerifiedVisible(!isPasswordVerifiedVisible);
   };
 
-  function createUser(email,password,username){
-    const newUser = new User(email,password,username);
+  function createUser(email, password, username) {
+    const newUser = new User(email, password, username);
     registerUser(newUser);
   }
 
@@ -113,7 +112,7 @@ function SignUpScreen() {
         <Button
           mode="contained"
           style={styles.button}
-          onPress={createUser}
+          onPress={() => createUser(email, password, username)}
         >
           Next
         </Button>
