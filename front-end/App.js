@@ -8,6 +8,7 @@ import SignUpScreen from "./screens/SignUpScreen";
 import LoginScreen from "./screens/LoginScreen";
 import SignUpPersonalInfoScreen from "./screens/SignUpPersonalInfoScreen";
 import GoogleSignInScreen from "./screens/GoogleSignInScreen";
+import firebase from './firebaseConfig';
 
 const Stack = createStackNavigator();
 

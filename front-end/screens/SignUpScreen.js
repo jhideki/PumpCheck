@@ -3,11 +3,13 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { signIn } from "../api/api";
-
+import { registerUser } from "../api/firebaseAPI";
+import User from "../objects/User";
 function SignUpScreen() {
+
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState("");
   const [passwordVerified, setPasswordVerified] = React.useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordVerifiedVisible, setIsPasswordVerifiedVisible] =
@@ -19,6 +21,11 @@ function SignUpScreen() {
   const togglePasswordVerifiedVisibility = () => {
     setIsPasswordVerifiedVisible(!isPasswordVerifiedVisible);
   };
+
+  function createUser(email,password,username){
+    const newUser = new User(email,password,username);
+    registerUser(newUser);
+  }
 
   const navigation = useNavigation();
 
@@ -63,8 +70,8 @@ function SignUpScreen() {
         <View style={styles.input}>
           <TextInput
             label="Username"
-            value={email}
-            onChangeText={(email) => setEmail(email)}
+            value={username}
+            onChangeText={(username) => setEmail(username)}
             mode="outlined"
           />
         </View>
@@ -106,7 +113,7 @@ function SignUpScreen() {
         <Button
           mode="contained"
           style={styles.button}
-          onPress={() => navigation.navigate("SignupPersonInfo")}
+          onPress={createUser}
         >
           Next
         </Button>
