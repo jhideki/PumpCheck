@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View } from "react-native";
 import { TextInput, Appbar, Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
 import { loginUser } from "../api/firebaseAPI";
 import User from "../objects/User";
+import { AuthContext } from "../utils/AuthContext";
 
 function LoginScreen() {
+  const { setCurrentUser } = useContext(AuthContext);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [username, setUsername] = React.useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-  const handleLogin = () => {
+  const handleLogin = async () => {
     user = new User(email, password);
-    loginUser(user);
+    userCredentials = loginUser(user);
+    setCurrentUser(userCredentials);
   };
   const navigation = useNavigation();
   return (

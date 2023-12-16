@@ -4,18 +4,35 @@ import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 
 function SignUpPersonalInfoScreen() {
+  const [username, setUsername] = React.useState("");
   const [name, setName] = React.useState("");
   const [age, setAge] = React.useState("");
   const [weight, setWeight] = React.useState("");
   const [feet, setFeet] = React.useState("");
   const [inches, setInches] = React.useState("");
   const [bodyFat, setBodyFat] = React.useState("");
+  const [bench, setBench] = React.useState("");
+  const [squat, setSquat] = React.useState("");
+  const [deadlift, setDeadlift] = React.useState("");
 
-  // Function to clear the text input when it's focused
   const clearTextInputOnFocus = () => {
-    setBodyFat(""); // Clear the bodyFat text when the input is focused
+    setBodyFat("");
   };
-
+  const handleCreateAccount = () => {
+    user = new User();
+    user.setUserData(
+      username,
+      name,
+      age,
+      weight,
+      feet,
+      inches,
+      bodyFat,
+      bench,
+      squat,
+      deadlift
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -24,6 +41,14 @@ function SignUpPersonalInfoScreen() {
             label="Name"
             value={name}
             onChangeText={(name) => setName(name)}
+            mode="outlined"
+          />
+        </View>
+        <View style={styles.input}>
+          <TextInput
+            label="Username"
+            value={username}
+            onChangeText={(username) => setUsername(username)}
             mode="outlined"
           />
         </View>
@@ -72,12 +97,9 @@ function SignUpPersonalInfoScreen() {
             value={bodyFat}
             keyboardType="numeric"
             onChangeText={(text) => {
-              // Check if the last character is not "%"
               if (!text.endsWith(" %")) {
-                // Append "%" to the input value before setting it in state
                 setBodyFat(text + " %");
               } else {
-                // If the input already ends with "%", set it directly in state
                 setBodyFat(text);
               }
             }}
@@ -85,10 +107,42 @@ function SignUpPersonalInfoScreen() {
             mode="outlined"
           />
         </View>
+
+        <View style={styles.input}>
+          <TextInput
+            label="Bench"
+            value={bench}
+            keyboardType="numeric"
+            onChangeText={(bench) => setBench(bench)}
+            mode="outlined"
+          />
+        </View>
+        <View style={styles.input}>
+          <TextInput
+            label="Squat"
+            value={squat}
+            keyboardType="numeric"
+            onChangeText={(squat) => setSquat(squat)}
+            mode="outlined"
+          />
+        </View>
+        <View style={styles.input}>
+          <TextInput
+            label="Deadlift"
+            value={deadlift}
+            keyboardType="numeric"
+            onChangeText={(deadlift) => setDeadlift(deadlift)}
+            mode="outlined"
+          />
+        </View>
       </View>
 
       <View style={styles.subContent30}>
-        <Button mode="contained" style={styles.button}>
+        <Button
+          onPress={handleCreateAccount}
+          mode="contained"
+          style={styles.button}
+        >
           Create Account
         </Button>
       </View>

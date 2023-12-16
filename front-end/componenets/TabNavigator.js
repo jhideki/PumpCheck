@@ -2,7 +2,7 @@ import { createMaterialBottomTabNavigator } from "react-native-paper/react-navig
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import AddWorkoutScreen from "../screens/AddWorkoutScreen";
-import LoginScreen from "../screens/LoginScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -31,7 +31,7 @@ function TabNavigator() {
       />
       <Tab.Screen
         name="Profile"
-        component={LoginScreen}
+        component={ProfileScreen}
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color }) => (

@@ -5,10 +5,10 @@ import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
 import { registerUser } from "../api/firebaseAPI";
 import User from "../objects/User";
+
 function SignUpScreen() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [username, setUsername] = React.useState("");
   const [passwordVerified, setPasswordVerified] = React.useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isPasswordVerifiedVisible, setIsPasswordVerifiedVisible] =
@@ -21,9 +21,14 @@ function SignUpScreen() {
     setIsPasswordVerifiedVisible(!isPasswordVerifiedVisible);
   };
 
-  function createUser(email, password, username) {
-    const newUser = new User(email, password, username);
-    registerUser(newUser);
+  const handleNext = () => {
+    createUser(email, password, username);
+    navigation.navigate("SignUpPersonInfo");
+  };
+  function createUser(email, password) {
+    const newUser = new User(email, password);
+    userCredential = registerUser(newUser);
+    setCurrentUser(userCredential);
   }
 
   const navigation = useNavigation();
@@ -68,14 +73,6 @@ function SignUpScreen() {
         </View>
         <View style={styles.input}>
           <TextInput
-            label="Username"
-            value={username}
-            onChangeText={(username) => setUsername(username)}
-            mode="outlined"
-          />
-        </View>
-        <View style={styles.input}>
-          <TextInput
             label="Password"
             value={password}
             onChangeText={(password) => setPassword(password)}
@@ -112,7 +109,7 @@ function SignUpScreen() {
         <Button
           mode="contained"
           style={styles.button}
-          onPress={() => createUser(email, password, username)}
+          onPress={() => handleNext()}
         >
           Next
         </Button>
