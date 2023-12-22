@@ -18,7 +18,7 @@ function LoginScreen() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    user = new User(email, password);
+    const user = new User(email, password);
     userCredentials = loginUser(user);
     setCurrentUser(userCredentials);
     navigation.navigate("Profile");

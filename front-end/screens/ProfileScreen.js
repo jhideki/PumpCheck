@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { AuthContext } from "../utils/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/styles";
-import { logoutUser } from "../api/firebaseAPI";
+import { logoutUser } from "../api/firebaseAuth";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 
 function ProfileScreen() {

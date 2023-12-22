@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { registerUser } from "../api/firebaseAPI";
+import { registerUser } from "../api/firebaseAuth";
 import User from "../objects/User";
+import { AuthContext } from "../utils/AuthContext";
 
 function SignUpScreen() {
   const [email, setEmail] = React.useState("");
@@ -14,6 +15,7 @@ function SignUpScreen() {
   const [isPasswordVerifiedVisible, setIsPasswordVerifiedVisible] =
     useState(false);
 
+  const { setCurrentUser } = useContext(AuthContext);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -21,17 +23,18 @@ function SignUpScreen() {
     setIsPasswordVerifiedVisible(!isPasswordVerifiedVisible);
   };
 
-  const handleNext = () => {
-    createUser(email, password, username);
-    navigation.navigate("SignUpPersonInfo");
-  };
-  function createUser(email, password) {
-    const newUser = new User(email, password);
-    userCredential = registerUser(newUser);
-    setCurrentUser(userCredential);
-  }
-
   const navigation = useNavigation();
+
+  const handleNext = () => {
+    createUser(email, password);
+    navigation.navigate("SignupPersonInfo");
+  };
+
+  const createUser = async (email, password) => {
+    const newUser = new User(email, password);
+    userCredential = await registerUser(newUser);
+    setCurrentUser(userCredential);
+  };
 
   function comparePasswords(string1, string2) {
     return string1 === string2;
