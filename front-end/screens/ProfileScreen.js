@@ -2,9 +2,9 @@ import React, { useEffect, useContext } from "react";
 import { View } from "react-native";
 import { AuthContext } from "../utils/AuthContext";
 import { useNavigation } from "@react-navigation/native";
-import { Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { logoutUser } from "../api/firebaseAPI";
+import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 
 function ProfileScreen() {
   const { currentUser } = useContext(AuthContext);
@@ -20,8 +20,23 @@ function ProfileScreen() {
     }
   }, [currentUser, navigation]);
 
+  const userEmail =
+    currentUser && currentUser.email ? currentUser.email : "Unknown";
+
   return (
     <View style={styles.container}>
+      <Card>
+        <Card.Cover source={{ uri: "https://placekitten.com/500/300" }} />
+        <Card.Content>
+          <View style={styles.profileHeader}>
+            <Avatar.Image
+              size={80}
+              source={{ uri: "https://placekitten.com/100/100" }}
+            />
+            <Title>Signed in as:{userEmail}</Title>
+          </View>
+        </Card.Content>
+      </Card>
       <View style={styles.content}>
         <Button
           mode="contained"

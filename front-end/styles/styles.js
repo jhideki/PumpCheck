@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
     width: "40%",
     marginVertical: commonVerticalSpacing, // Apply vertical spacing to horizontal inputs
   },
+  profileHeader: {
+    alginItems: "center",
+    marginBottom: 16,
+  },
 });
 
 export default styles;

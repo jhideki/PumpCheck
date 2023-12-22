@@ -15,12 +15,14 @@ function LoginScreen() {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+  const navigation = useNavigation();
+
   const handleLogin = async () => {
     user = new User(email, password);
     userCredentials = loginUser(user);
     setCurrentUser(userCredentials);
+    navigation.navigate("Profile");
   };
-  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Appbar.Header>
