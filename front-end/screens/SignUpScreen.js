@@ -3,9 +3,8 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { registerUser } from "../api/firebaseAuth";
 import User from "../objects/User";
-import { AuthContext } from "../utils/AuthContext";
+import { signInWithEmail, signUpWithEmail } from "../api/Auth";
 
 function SignUpScreen() {
   const [email, setEmail] = React.useState("");
@@ -15,7 +14,6 @@ function SignUpScreen() {
   const [isPasswordVerifiedVisible, setIsPasswordVerifiedVisible] =
     useState(false);
 
-  const { setCurrentUser } = useContext(AuthContext);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -32,8 +30,8 @@ function SignUpScreen() {
 
   const createUser = async (email, password) => {
     const newUser = new User(email, password);
-    userCredential = await registerUser(newUser);
-    setCurrentUser(userCredential);
+    const userCredential = await signUpWithEmail(newUser);
+    userCredential = await signInWithEmail(userCredential);
   };
 
   function comparePasswords(string1, string2) {

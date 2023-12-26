@@ -1,14 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import { TextInput, Appbar, Button } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { loginUser } from "../api/firebaseAPI";
 import User from "../objects/User";
-import { AuthContext } from "../utils/AuthContext";
+import { signInWithEmail } from "../api/Auth";
 
 function LoginScreen() {
-  const { setCurrentUser } = useContext(AuthContext);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -19,9 +17,8 @@ function LoginScreen() {
 
   const handleLogin = async () => {
     const user = new User(email, password);
-    userCredentials = loginUser(user);
-    setCurrentUser(userCredentials);
-    navigation.navigate("Profile");
+    userCredentials = await signInWithEmail(user);
+    navigation.navigate("Tabs");
   };
   return (
     <View style={styles.container}>

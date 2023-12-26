@@ -3,7 +3,6 @@ import { View } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import styles from "../styles/styles";
 import { useNavigation } from "@react-navigation/native";
-import { initializeUserData } from "../api/firebaseAPI";
 
 function SignUpPersonalInfoScreen() {
   const navigate = useNavigation;
@@ -35,18 +34,6 @@ function SignUpPersonalInfoScreen() {
       squat,
       deadlift,
     );
-    initializeUserData(user)
-      .then((result) => {
-        console.log(result.message);
-        if (result.success) {
-          navigation.navigate("Profile");
-        } else {
-          console.log("error saving data");
-        }
-      })
-      .catch((error) => {
-        console.log("Error calling initializeUserData", error);
-      });
   };
   return (
     <View style={styles.container}>

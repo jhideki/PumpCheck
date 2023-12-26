@@ -1,27 +1,35 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { AuthContext } from "../utils/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../styles/styles";
-import { logoutUser } from "../api/firebaseAuth";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import { supabase } from "../supabase";
+import { signOut } from "../api/Auth";
 
 function ProfileScreen() {
-  const { currentUser } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [session, setSession] = useState(null);
 
-  const handleLogout = () => {
-    logoutUser();
+  const handleLogout = async () => {
+    const response = await signOut();
   };
 
   useEffect(() => {
-    if (!currentUser) {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (session == null) {
       navigation.navigate("Login");
     }
-  }, [currentUser, navigation]);
-
-  const userEmail =
-    currentUser && currentUser.email ? currentUser.email : "Unknown";
+  }, [session, navigation]);
 
   return (
     <View style={styles.container}>
@@ -33,7 +41,7 @@ function ProfileScreen() {
               size={80}
               source={{ uri: "https://placekitten.com/100/100" }}
             />
-            <Title>Signed in as:{userEmail}</Title>
+            <Title>Signed in as:{session ? session.user.id : "none"}</Title>
           </View>
         </Card.Content>
       </Card>
